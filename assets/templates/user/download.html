@@ -1,0 +1,35 @@
+{% extends 'user/userbase.html' %}
+{% load static %}
+
+    {% block contents %}
+            <!-- End banner Area -->
+            <section class="generic-banner relative">
+				<div class="container">
+					<div class="row height align-items-center justify-content-center">
+						<div class="col-lg-10">
+							<div class="generic-banner-content">
+
+                                <div class="row">
+									<form method="post" action="{% url 'decrypt' %}" enctype="multipart/form-data">
+										{% csrf_token %}
+										{% for i in objects %}
+										<input type="hidden" name="id" value="{{i.id}}" readonly>
+										<input type="text" name="file_name" value="{{i.filename}}" readonly>
+										<input type="hidden" name="algorithms" value="{{i.algorithms}}">
+										{% if i.algorithms == 'BLOWFISH' or i.algorithms == 'AES-256' %}
+										<input type="text" name="key" required="True" placeholder="Enter the Secret Key">
+										{% else %}
+										<input type="file" name="private_key" required/>
+										{% endif %}
+										<input type="submit" id="redirect" name="decrypt" value="Download">
+										{% endfor %}
+									</form>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- End banner Area -->
+    {% endblock %}

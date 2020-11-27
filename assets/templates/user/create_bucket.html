@@ -1,0 +1,28 @@
+{% extends 'user/userbase.html' %}
+{% load static %}
+
+    {% block contents %}
+            <!-- End banner Area -->
+            <section class="banner-area relative" id="home">
+				<div class="container">
+					<div class="row fullscreen d-flex align-items-center justify-content-start">
+						<div class="banner-content col-lg-8 col-md-12">
+							<div class="loginbox">
+								<img src="{% static 'img/avatar.png' %} " class="avatar">
+									<h2>UPLOAD Files</h2>
+									<form method="post" action="{% url 'createbucket' %}">
+										{% csrf_token %}
+										<input type="text" name="username" value="{{request.session.loggeduser}}" readonly>
+										<input type="text" name="email" value="{{request.session.email}}" readonly>
+										<input type="text" name="bucket_name" required="True" placeholder="Enter the Bucket name">
+										<input type="submit" name="create" value="Create">
+									</form>
+								<a href="{% url 'bucketlist' %}">Go to Buckets</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- End banner Area -->
+    {% endblock %}

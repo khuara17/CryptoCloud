@@ -1,0 +1,40 @@
+{% extends 'user/userbase.html' %}
+{% load static %}
+
+    {% block contents %}
+            <!-- End banner Area -->
+			<section class="banner-area relative" id="home">
+				<div class="container">
+					<div class="row fullscreen d-flex align-items-center justify-content-start">
+						<div class="banner-content col-lg-8 col-md-12">
+							<div class="loginbox">
+								<img src="{% static 'img/avatar.png' %} " class="avatar">
+									<h2>Upload Files</h2>
+									<form method="post" action="{% url 'UploadToCloud' %}" enctype="multipart/form-data">
+										{% csrf_token %}
+										{% for i in objects %}
+										<input type="hidden" name="name" value="{{i.username}}" readonly>
+										<input type="text" name="email" value="{{i.email}}" readonly>
+										<input type="text" name="bucketname" value="{{i.bucketname}}" placeholder="Bucketname" readonly>
+										<label for="accesskey">Accesskey :</label>
+										<input type="text" name="accesskey" value="{{i.accesskey}}" placeholder="Accesskey" readonly>
+										{% endfor %}
+										<input type="text" name="secretkey" placeholder="Enter 8 Digit Password For Encryption" required="True">
+										<input type="text" name="filename" placeholder="Write Your File Name" required="True">
+							            <input type="file" name="userfile">
+										<select name="algorithms" class="ui dropdown">
+											<option value="BLOWFISH">BLOWFISH</option>
+											<option value="AES-256">AES-256</option>
+											<option value="RSA">RSA</option>
+											<option value="RSA & AES">RSA & AES</option>
+											<option value="AES & BLOWFISH">AES & BLOWFISH</option>
+										</select><br>
+										<input type="submit" name="uploadfile" value="Upload File">
+									</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- End banner Area -->
+    {% endblock %}
