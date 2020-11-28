@@ -3,38 +3,54 @@
 
     {% block contents %}
             <!-- End banner Area -->
-			<section class="banner-area relative" id="home">
-				<div class="container">
-					<div class="row fullscreen d-flex align-items-center justify-content-start">
-						<div class="banner-content col-lg-8 col-md-12">
-							<div class="loginbox">
-								<img src="{% static 'img/avatar.png' %} " class="avatar">
-									<h2>Upload Files</h2>
-									<form method="post" action="{% url 'UploadToCloud' %}" enctype="multipart/form-data">
-										{% csrf_token %}
-										{% for i in objects %}
-										<input type="hidden" name="name" value="{{i.username}}" readonly>
-										<input type="text" name="email" value="{{i.email}}" readonly>
-										<input type="text" name="bucketname" value="{{i.bucketname}}" placeholder="Bucketname" readonly>
+<section class="generic-banner relative">
+	<div class="container">
+		<div class="row height align-items-center">
+			<div class="col-lg-10">
+				<div class="generic-banner-content">
+					<!-- form starts here -->
+					<div class="signup-header wow fadeInUp" style="padding-bottom:20px;">
+						<h3 class="form-title text-center" style="color:#36383a">Upload Files</h3>
+						<form method="post" id="contact-form" class="form-horizontal" action="{% url 'UploadToCloud' %}" enctype="multipart/form-data"> {% csrf_token %}
+							<div class="row">
+								<div class="col-lg-6 col-sm-6"> {% for i in objects %}
+									<input type="hidden" name="name" class="form-control wow fadeInUp" value="{{i.username}}" readonly>
+									<div class="form-group">
+										<label for="email" class="control-label">Email:</label>
+										<input type="text" name="email" class="form-control wow fadeInUp" value="{{i.email}}" readonly> </div>
+									<div class="form-group">
+										<label for="bucketname">Bucket Name:</label>
+										<input type="text" name="bucketname" class="form-control wow fadeInUp" value="{{i.bucketname}}" placeholder="Bucketname" readonly> </div>
+									<div class="form-group">
 										<label for="accesskey">Accesskey :</label>
-										<input type="text" name="accesskey" value="{{i.accesskey}}" placeholder="Accesskey" readonly>
-										{% endfor %}
-										<input type="text" name="secretkey" placeholder="Enter 8 Digit Password For Encryption" required="True">
-										<input type="text" name="filename" placeholder="Write Your File Name" required="True">
-							            <input type="file" name="userfile">
-										<select name="algorithms" class="ui dropdown">
+										<input type="text" name="accesskey" class="form-control wow fadeInUp" value="{{i.accesskey}}" placeholder="Accesskey" readonly> </div> {% endfor %} </div>
+								<div class="col-lg-6 col-sm-6">
+									<div class="form-group">
+										<input type="text" name="secretkey" class="form-control wow fadeInUp" placeholder="Enter 8 Digit Password For Encryption" required> </div>
+									<div class="form-group">
+										<input type="text" name="filename" class="form-control wow fadeInUp" placeholder="Write Your File Name" required> </div>
+									<div class="form-group">
+										<input type="file" class="form-control wow fadeInUp" name="userfile" required> </div>
+									<div class="form-group">
+										<select name="algorithms" class="form-control wow fadeInUp" class="ui dropdown" required>
 											<option value="BLOWFISH">BLOWFISH</option>
 											<option value="AES-256">AES-256</option>
 											<option value="RSA">RSA</option>
 											<option value="RSA & AES">RSA & AES</option>
 											<option value="AES & BLOWFISH">AES & BLOWFISH</option>
-										</select><br>
-										<input type="submit" name="uploadfile" value="Upload File">
-									</form>
+										</select>
+										<br> </div>
+									<div class="form-group">
+										<input type="submit" class="btn btn-get-started wow fadeInUp" style="background:#3898f7;" name="uploadfile" value="Upload File"> </div>
+								</div>
 							</div>
-						</div>
+						</form>
 					</div>
+				<!-- form Ends here -->
 				</div>
-			</section>
+			</div>
+		</div>
+	</div>
+</section>
 			<!-- End banner Area -->
     {% endblock %}

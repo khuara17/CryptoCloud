@@ -8,7 +8,7 @@ from django.db.models import Avg
 from django.http import HttpResponse, Http404, FileResponse, HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .algorithms import AESCipher,BlowfishCipher,HybridAESRSACipher
 
 from pathlib import Path
@@ -131,8 +131,9 @@ def UploadToCloud(request):
             # file_temp.write(ipfile.read())
             # print(os.stat(ipfile).st_size)
             messages.success(request, 'Your File has been Uploaded successfully')
-            dict = UserFileUploadModel.objects.filter(email=usremail)
-            return render(request, 'user/myfiles.html', {'objects': dict})
+            return redirect(myfile)
+            # dict = UserFileUploadModel.objects.filter(email=usremail)
+            # return render(request, 'user/myfiles.html', {'objects': dict})
         else:
             print(form.errors)
             return render(request,'user/bucket_list.html',{'upload_error' : 'Error occurred while uploading the file'})
@@ -208,6 +209,7 @@ def DecryptFile(request):
         # form = DecryptRequestForm()
         if request.method == 'POST':
             id = request.POST.get('id')
+            print(id)
             # instance = DecryptRequestModel.objects.get(id=id)
             form = DecryptRequestForm(request.POST,request.FILES)
 
@@ -230,14 +232,19 @@ def DecryptFile(request):
 
                 if res == "Key_Mismatch" or res == "Key Not Found":
                     print("Wrong Key")
-                    return render(request,'user/myfiles.html',{'res':'Wrong Key'})
+                    messages.success(request, 'Key Mismatch.')
+                    return redirect(myfile)
+                    # return render(request,'user/myfiles.html',{'res':'Wrong Key'})
                 elif res == "Data_Not_Found":
                     print("Data Not Found")
-                    return render(request,'user/download.html',{'res':'Data Not Found'})
+                    messages.success(request, 'Your file Not Found On Server.')
+                    return redirect(myfile)
+                    # return render(request,'user/myfiles.html',{'res':'Data Not Found'})
                 else:
                     data = UserFileUploadModel.objects.get(id=id)
                     file_path2 = os.path.join(settings.MEDIA_ROOT, str(data.userfile))
                     if os.path.exists(file_path2):
+                        messages.success(request,'Your file has been decrypted.')
                         with open(file_path2, 'rb') as fh:
                             response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
                             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path2)
@@ -246,7 +253,8 @@ def DecryptFile(request):
                     return render(request, 'user/charts.html', {'res': 'The file has decrypted'})
             else:
                 print(form.errors)
-                return render(request,'user/download.html',{'res':'The file not decrypted'})
+                messages.success(request, 'Some Error Occured Please try Again In some Time.')
+                return render(request,'user/myfiles.html',{'res':'The file not decrypted'})
     else:
         return render(request, 'user_login.html', {})
 
@@ -271,7 +279,7 @@ def Decryption(id,key,algtype):
                     dec_time = t1_stop - t1_start
                     print("decrypted Successfully")
                     print(dec_time)
-                    data.dec_time = dec_time
+                    data.dec_time = round(dec_time,3)
                     data.save()
                     decrypt_result = "Decrypted Successfully"
                 else:
@@ -343,9 +351,10 @@ def Process_data(data):
 def charts(request):
     if 'isloggedin' in request.session:
         dataset = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('enc_time'))
-        # print(dataset['filesize'])
         result = Process_data(dataset)
-        return render(request,'user/charts.html',{'dataset':  result})
+        decrypt = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('dec_time')).exclude(dec_time__isnull=True)
+        decrypt_res = Process_data(decrypt)
+        return render(request,'user/charts.html',{ 'decrypt' :  decrypt_res ,'dataset':  result})
     else:
         return render(request, 'user_login.html', {})
 

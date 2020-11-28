@@ -26,6 +26,7 @@
 			<link rel="stylesheet" href="{% static 'css/animate.min.css'%}">
 			<link rel="stylesheet" href="{% static 'css/owl.carousel.css'%}">
 			<link rel="stylesheet" href="{% static 'css/main.css'%}">
+		<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 			<!--
 			CSS
 			=============================================
@@ -47,8 +48,8 @@
 				      </div>
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
-				          <li class="menu-active"><a href="{% url 'adminhome' %}">Dashboard</a></li>
-				          <li><a href="{% url 'usermanage' %}">Users</a></li>
+<!--				          <li class="menu-active"><a href="{% url 'homeafterlogin' %}">Dashboard</a></li>-->
+				          <li><a href="{% url 'usermanage' %}">User Management</a></li>
 				          <li><a href="{% url 'uploadlog' %}">Upload Log</a></li>
 				          <li><a href="{% url 'charts' %}">Charts</a></li>
 				          <li><a href="{% url  'logout' %}">Logout</a></li>
@@ -113,7 +114,6 @@
 									<li><img src="{% static 'img/i6.jpg'%}" alt="">
 									<li><img src="{% static 'img/i7.jpg'%}" alt="">
 									<li><img src="{% static 'img/i8.jpg'%}" alt="">
-									<img src="{% static 'images/bla.jpeg'%}" alt="">
 								</ul>
 							</div>
 						</div>

@@ -2,8 +2,13 @@ from django.shortcuts import render
 from django.contrib import messages
 from login.models import UserRegistrationModel
 from user.models import UserFileUploadModel
+from django.db.models import Avg
+from itertools import groupby
 
 # Create your views here.
+def homeafterlogin(request):
+    return render(request,'admin/adminhome.html')
+
 def adminhome(request):
     if request.method == "POST":
         usid = request.POST.get('username')
@@ -13,7 +18,7 @@ def adminhome(request):
             request.session['isloggedin'] = True
             request.session['role'] = 'user'
             #request.session['role'] = 'admin'
-            return render(request, 'admin/adminhome.html')
+            return render(request, 'admin/usermanage.html')
         else:
             print("Invalid Form")
             messages.success(request, 'Invalid Login Details')
@@ -46,5 +51,20 @@ def uploadlog(request):
     logs = UserFileUploadModel.objects.all()
     return render(request, 'admin/uploadlog.html', {'logs': logs})
 
+def Process_data(data):
+    series = [
+        {
+            "algorithm": k,
+            "data": [{"x":float(d["filesize"])/1048576.0,"y":d["dcount"]} for d in g],
+        }
+        for k, g in groupby(sorted(data, key=lambda d: [d["algorithms"],d['dcount']], reverse= True), key=lambda d: d["algorithms"])
+    ]
+    # print(series)
+    return series
+
 def charts(request):
-    return render(request,'admin/charts.html',{})
+    dataset = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('enc_time'))
+    # print(dataset['filesize'])
+    result = Process_data(dataset)
+    # print(result)
+    return render(request,'admin/charts.html',{'dataset':  result})
