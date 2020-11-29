@@ -1,0 +1,49 @@
+{% extends 'user/userbase.html' %}
+{% load static %}
+
+    {% block contents %}
+            <!-- End banner Area -->
+            <section class="generic-banner relative">
+				<div class="container">
+					<div class="row height align-items-center justify-content-center">
+						<div class="col-lg-10">
+							<div class="generic-banner-content">
+								{% for message in messages %}
+									<div class="alert alert-danger alert-dismissible">
+										<button type="button" class="close" data-dismiss="alert">&times;</button>
+										<strong>{{ message }}</strong>
+									</div>
+								{% endfor %}
+							<div class="signup-header wow fadeInUp" style="padding-bottom:20px;">
+								<h3 class="form-title text-center" style="color:#36383a">Use your Secret Key To decrypt And Download The File.</h3>
+									<form method="post" id="contact-form" action="{% url 'decrypt' %}" enctype="multipart/form-data">
+										{% csrf_token %}
+										{% for i in objects %}
+										<input type="hidden" class="form-control wow fadeInUp"  name="id" value="{{i.id}}" readonly>
+										<div class="form-group">
+										<input type="text" name="file_name" class="form-control wow fadeInUp"  value="{{i.filename}}" readonly>
+										</div>
+										<div class="form-group">
+										<input type="hidden" class="form-control wow fadeInUp"  name="algorithms" value="{{i.algorithms}}">
+										</div>
+										{% if i.algorithms == 'BLOWFISH' or i.algorithms == 'AES-256' %}
+										<div class="form-group">
+											<input type="text" name="key" class="form-control wow fadeInUp"  required="True" placeholder="Enter the Secret Key">
+										</div>
+										{% else %}
+										<div class="form-group">
+											<input type="file" class="form-control wow fadeInUp"  name="private_key" required/>
+										</div>
+										{% endif %}
+										<input type="submit" id="redirect" name="decrypt" value="Download">
+										{% endfor %}
+									</form>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- End banner Area -->
+    {% endblock %}
