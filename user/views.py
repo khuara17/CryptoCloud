@@ -55,22 +55,25 @@ def CreateBucket(request):
             access_key = secrets.token_urlsafe(8) #creating 8 digits random access key
             if not bucket.filter(username=username,email=email, bucketname=bucketname).exists():
                 try:
+                    print("Creating Bucket")
                     UserBucketCreatModel.objects.create(username=username, email=email, bucketname=bucketname,accesskey=access_key)
                     messages.success(request, 'Your Bucket has been created successfully')
                     print(username, email, bucketname)
-                    print("Bucket Created")
                     dict = UserBucketCreatModel.objects.filter(email=email)
                     return render(request, 'user/bucket_list.html', {'buckets': dict})
                     # return render(request, 'user/bucket_list.html', {'buckets': 'Your Bucket has been created successfully'})
-                except:
-                    messages.success(request, 'Bucket Name Already exist')
+                except Exception as exc:
+                    messages.success(request, 'Bucket Not created, something went wrong')
                     print("Bucket Not created, something wrong")
-                    pass
+                    print(exc)
+                    dict = UserBucketCreatModel.objects.filter(email=email)
+                    return render(request, 'user/bucket_list.html', {'buckets': dict})
             else:
                 print("Bucket Already Exists")
-                error = "Bucket Already Exists"
+                # error = "Bucket Already Exists"
+                dict = UserBucketCreatModel.objects.filter(email=email)
                 messages.success(request, 'Bucket With This Name Already Exists')
-                return render(request, 'user/create_bucket.html', {'error':error})
+                return render(request, 'user/bucket_list.html', {'buckets': dict})
         else:
             usremail = request.session['email']
             dict = UserBucketCreatModel.objects.filter(email=usremail)
@@ -91,10 +94,17 @@ def BucketList(request):
 # Delete Bucket
 def DeleteBucket(request,id):
     if 'isloggedin' in request.session:
-        print("Deleted-",id)
-        UserBucketCreatModel.objects.filter(id=int(id)).delete()
-        print("user with id :-",id,"has been deleted")
-        return render(request,'user/bucket_list.html',{})
+        print("Deleting-",id)
+        usremail = request.session['email']
+        try:
+            UserBucketCreatModel.objects.filter(id=int(id)).delete()
+            dict = UserBucketCreatModel.objects.filter(email=usremail)
+            print("user with id :-",id,"has been deleted")
+            return render(request,'user/bucket_list.html',{'buckets':dict})
+        except Exception as exc:
+            message.success(request,"Could not delete bucket, please try again later")
+            dict = UserBucketCreatModel.objects.filter(email=usremail)
+            return render(request,'user/bucket_list.html',{'buckets':dict})
     else:
         return render(request, 'user_login.html', {})
 
