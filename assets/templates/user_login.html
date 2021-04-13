@@ -48,12 +48,12 @@
 				      </div>
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
-				          <li class="menu-active"><a href="#home">Home</a></li>
-				          <li><a href="#plan">Plan</a></li>
-				          <li><a href="#about">About</a></li>
-				          <li><a href="#service">Service</a></li>
-				          <li><a href="#faq">Faq</a></li>
-				          <li><a href="#contact">Contact</a></li>
+				          <li class="menu-active"><a href="{% url 'index' %}">Home</a></li>
+				          <li><a href="{% url 'index' %}#plan">Plan</a></li>
+				          <li><a href="{% url 'index' %}#about">About</a></li>
+				          <li><a href="{% url 'index' %}#service">Service</a></li>
+				          <li><a href="{% url 'index' %}#faq">Faq</a></li>
+				          <li><a href="{% url 'index' %}#contact">Contact</a></li>
 				          <li class="menu-has-children"><a href="">Login</a>
 				            <ul>
 				              <li><a href="{% url 'userregistration' %}" data-modal="modalOne">User</a></li>

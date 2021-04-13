@@ -68,9 +68,9 @@ class UserFileUploadModel(models.Model):
     ALGORITHMS = [
         ('BLOWFISH', 'BLOWFISH'),
         ('AES-256', 'AES-256'),
-        ('RSA', 'RSA'),
+        # ('RSA', 'RSA'),
         ('RSA & AES', 'RSA & AES'),
-        ('AES & BLOWFISH', 'AES & BLOWFISH'),
+        ('RSA & BLOWFISH', 'RSA & BLOWFISH'),
     ]
     algorithms = models.CharField(max_length=15, choices=ALGORITHMS, default='BLOWFISH')
     filesize = models.CharField(max_length=80)

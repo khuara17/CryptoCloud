@@ -53,19 +53,30 @@ def uploadlog(request):
     return render(request, 'admin/uploadlog.html', {'logs': logs})
 
 def Process_data(data):
-    series = [
-        {
-            "algorithm": k,
-            "data": [{"x":float(d["filesize"])/1048576.0,"y":d["dcount"]} for d in g],
-        }
-        for k, g in groupby(sorted(data, key=lambda d: [d["algorithms"],d['dcount']], reverse= True), key=lambda d: d["algorithms"])
-    ]
-    # print(series)
-    return series
+    # processed = groupby(sorted(data, key=lambda d: [d["algorithms"],d["filesize"]]), key=lambda d: d["algorithms"])
+    # print(processed)
+    # res = {}
+    # for item in processed:
+    #     res.setdefault(item['algorithms'], []).append(item['dcount'])
+    try:
+        series = [
+            {
+                "algorithm": k,
+                "data": [{"x":float(d["filesize"])/1048576.0,"y":d["dcount"]} for d in g],
+            }
+            for k, g in groupby(sorted(data, key=lambda d: [d["algorithms"],d['dcount']], reverse= True), key=lambda d: d["algorithms"])
+        ]
+        print(series)
+        return series
+    except Exception as exc:
+        print("########################## Error")
+        print(exc)
+        return 0
 
 def charts(request):
-    dataset = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('enc_time'))
-    # print(dataset['filesize'])
-    result = Process_data(dataset)
-    # print(result)
-    return render(request,'admin/charts.html',{'dataset':  result})
+        dataset = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('enc_time'))
+        # print(dataset)
+        result = Process_data(dataset)
+        decrypt = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('dec_time')).exclude(dec_time__isnull=True)
+        decrypt_res = Process_data(decrypt)
+        return render(request,'admin/charts.html',{ 'decrypt' :  decrypt_res ,'dataset':  result})
