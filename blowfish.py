@@ -695,17 +695,29 @@ t1_start = process_time()
 # # #aes.encrypt_file('Happy.png','encrypted.png')
 # aes.decrypt_file('input.txt.enc')
 
-algo = RSACipher('public.txt','private.txt')
-# t = algo.decrypt("q9tjoeuDRH4mAL7NThZeNOVy+Ubxezxy0uLE6fTTg7Udf8+yWW9AcTDCWcWDrtNhecbd106fo1ghi7hZSjfM4jRaOH+ziLgDLUeGrrCnuYZHt3G2RSrBEw+iiZz6rSK+tWFZQwRk6VwxJLx4RtVf4K0ZeN6/NgR55jJZZeHv8n4J046+4hvw3pUw3r2/QrI5+c9Equ/TLacWlDbgHUaMDvJLOqh2fHyD6q7wlDFOHjfj1Ocnr5MqwaR34POwnBBQaUouNtQXNWxwPFGnbkFk4mQnjWjO6Z8PqMKSZTtGz98huKcCBpSuDU/S4PbX2bNHp3+HQhy/IEZmDUprsHcSAA==")
-# print(t)
-algo.generate_keys()
-algo.encrypt_file("helloworld","out")
-# print(algo.encrypt('hello world'))
-# print(algo.decrypt('FGVaCXTJ/lgh+taIhfaaz1bFL6igL3vJoLBIWyq2LiLUAzd/bmbgOlzr7UYEAFUdaAmTn5lAvABIT6YSEDYrXbmECUzUYJvhVq/5MSJNYzRPwZrTUiafZNlWDgS1n5EiPqHN6wYY9E1lqjD/FsmAhFvwqJMeYQS8x1G6g183Wk12hnDpx/cEfwx1ZzPfafTl6O8cXwtUu+6P8CW503d/VW8CUJLyMZ8TMc9xvGSxpV6g5KJQawmo5VlJ1IDBqmemnXqQGfH0sn0Z+ELgQ5UOUQRDDCq8wkeS9Zv61cOTHxXsBS8rZuPGA6C9HT2VhHYfVmC3tJsiHEWmBRc0Li9E7w=='))
+# algo = RSACipher('public.txt','private.txt')
+# # t = algo.decrypt("q9tjoeuDRH4mAL7NThZeNOVy+Ubxezxy0uLE6fTTg7Udf8+yWW9AcTDCWcWDrtNhecbd106fo1ghi7hZSjfM4jRaOH+ziLgDLUeGrrCnuYZHt3G2RSrBEw+iiZz6rSK+tWFZQwRk6VwxJLx4RtVf4K0ZeN6/NgR55jJZZeHv8n4J046+4hvw3pUw3r2/QrI5+c9Equ/TLacWlDbgHUaMDvJLOqh2fHyD6q7wlDFOHjfj1Ocnr5MqwaR34POwnBBQaUouNtQXNWxwPFGnbkFk4mQnjWjO6Z8PqMKSZTtGz98huKcCBpSuDU/S4PbX2bNHp3+HQhy/IEZmDUprsHcSAA==")
+# # print(t)
+# algo.generate_keys()
+# algo.encrypt_file("helloworld","out")
+# # print(algo.encrypt('hello world'))
+# # print(algo.decrypt('FGVaCXTJ/lgh+taIhfaaz1bFL6igL3vJoLBIWyq2LiLUAzd/bmbgOlzr7UYEAFUdaAmTn5lAvABIT6YSEDYrXbmECUzUYJvhVq/5MSJNYzRPwZrTUiafZNlWDgS1n5EiPqHN6wYY9E1lqjD/FsmAhFvwqJMeYQS8x1G6g183Wk12hnDpx/cEfwx1ZzPfafTl6O8cXwtUu+6P8CW503d/VW8CUJLyMZ8TMc9xvGSxpV6g5KJQawmo5VlJ1IDBqmemnXqQGfH0sn0Z+ELgQ5UOUQRDDCq8wkeS9Zv61cOTHxXsBS8rZuPGA6C9HT2VhHYfVmC3tJsiHEWmBRc0Li9E7w=='))
 
 
-# HybridAESRSACipher('85a698d3','248f6a08')
-t1_stop = process_time()
+# # HybridAESRSACipher('85a698d3','248f6a08')
+# t1_stop = process_time()
+
+algo = HybridAESRSACipher('public.txt','private.txt')
+
+algo.decrypt_file("input.txt.enc")
+# algo.generate_keys()
+
+
+# algo.encrypt_file("input.txt")
+
+
+
 print("Elapsed time during the whole program in seconds:", 
-                                 t1_stop-t1_start) 
+                                process_time()
+-t1_start) 
 

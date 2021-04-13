@@ -9,7 +9,7 @@ from django.http import HttpResponse, Http404, FileResponse, HttpResponseRedirec
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from .algorithms import AESCipher,BlowfishCipher,HybridAESRSACipher
+from .algorithms import AESCipher,BlowfishCipher,HybridAESRSACipher,HybridBlowFishRSACipher
 
 from pathlib import Path
 
@@ -110,6 +110,13 @@ def DeleteBucket(request,id):
 
 ############# Upload And Encryption Section ######################
 
+def DownloadPrivate(request,PrivateKey):
+    with open(PrivateKey, 'rb') as fh:
+        response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(PrivateKey)
+        # os.remove(file_path2)
+        return response
+
 # Upload File Temp
 def UploadFiles(request,id):
     if 'isloggedin' in request.session:
@@ -129,19 +136,25 @@ def UploadToCloud(request):
             # id = form.cleaned_data['id']
             algo = form.cleaned_data['algorithms']
             form.save()
-            enc_time,file_size,public_key = Encrypt_file(form,algo)
+            enc_time,file_size,public_key,private_key = Encrypt_file(form,algo)
             print("encryption Done")
             t = UserFileUploadModel.objects.last()
             t.filesize = file_size
             t.enc_time = round(enc_time,3)
             t.publickey = public_key
             t.save()
-            print(round(enc_time,3),file_size)
+            print(round(enc_time,3),file_size,public_key)
             # file_temp = tempfile.NamedTemporaryFile()
             # file_temp.write(ipfile.read())
             # print(os.stat(ipfile).st_size)
             messages.success(request, 'Your File has been Uploaded successfully')
-            return redirect(myfile)
+            # return redirect(myfile)
+            if algo == "BLOWFISH" or algo == "AES-256":
+                return redirect(myfile)
+            else:
+                Private_path = '../../../media' + private_key.split("/media",1)[1]
+                print(Private_path)
+                return render(request,'user/private_key.html',{'private':Private_path})
             # dict = UserFileUploadModel.objects.filter(email=usremail)
             # return render(request, 'user/myfiles.html', {'objects': dict})
         else:
@@ -167,8 +180,8 @@ def Encrypt_file(form,selectedalgo):
     path = str(userfile.userfile)
     # public = str(userfile.publickey)
     filename = path.split("/")[-1]
-    public = "%s.%s" % (path[:-len(filename)],'public.pem')
-    private = "%s-%s.%s.%s" % (path[:-len(filename)],"private",filename,"pem")
+    public = "%s%s.%s.%s" % (path[:-len(filename)],'public',filename,'pem')
+    private = "%s%s.%s.%s" % (path[:-len(filename)],"private",filename,"pem")
     print(public,"--",private)
     file = os.path.join(settings.MEDIA_ROOT, path)
     public_key = os.path.join(settings.MEDIA_ROOT, public)
@@ -192,11 +205,15 @@ def Encrypt_file(form,selectedalgo):
         algo = HybridAESRSACipher(private_key, public_key)
         algo.generate_keys()
         algo.encrypt_file(file)
+    elif selectedalgo == "RSA & BLOWFISH":
+        algo = HybridBlowFishRSACipher(private_key,public_key)
+        algo.generate_keys()
+        algo.encrypt_file(file)
     # t1_stop = time.process_time()
     total = time.time() - start_time
     print(total)
     os.remove(file)
-    return total, file_size, public_key
+    return total, file_size, public,private_key
 
 
 ############### Encryption part Ends Here ######################
@@ -239,9 +256,9 @@ def DecryptFile(request):
                 else:
                     # private_key = request.FILES['private_key']
                     private_key = form.cleaned_data['private_key']
-                    private = os.path.abspath(private_key.name)
+                    private = os.path.join(settings.MEDIA_ROOT,'UserUploads/Tempfile/',private_key.name)
                     print(private_key)
-                    print(os.path.abspath(private_key.name))
+                    print(private)
                     res = Decryption(id, private, "asym")
 
                 if res == "Key_Mismatch" or res == "Key Not Found":
@@ -254,6 +271,10 @@ def DecryptFile(request):
                     messages.success(request, 'Your file Not Found On Server.')
                     return redirect(myfile)
                     # return render(request,'user/myfiles.html',{'res':'Data Not Found'})
+                elif res == "Decryption Failed":
+                    print("Incorrect decryption")
+                    messages.success(request, 'Some Error Occured,Please try again later.')
+                    return redirect(myfile)
                 else:
                     data = UserFileUploadModel.objects.get(id=id)
                     file_path2 = os.path.join(settings.MEDIA_ROOT, str(data.userfile))
@@ -262,12 +283,13 @@ def DecryptFile(request):
                         with open(file_path2, 'rb') as fh:
                             response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
                             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path2)
+                            os.remove(file_path2)
                             return response
-                    os.remove(file_path2) # While decrypting, save temprorily decrypted file to server for downloading.
+                    # os.remove(file_path2) # While decrypting, save temprorily decrypted file to server for downloading.
                     return render(request, 'user/charts.html', {'res': 'The file has decrypted'})
             else:
                 print(form.errors)
-                messages.success(request, 'Some Error Occured Please try Again In some Time.')
+                messages.success(request, 'Some Error Occured Please try again after some Time.')
                 return render(request,'user/myfiles.html',{'res':'The file not decrypted'})
     else:
         return render(request, 'user_login.html', {})
@@ -307,17 +329,33 @@ def Decryption(id,key,algtype):
         # if os.path.exists(key):
         t1_start = time.process_time()
         file_path = os.path.join(settings.MEDIA_ROOT, str(data.userfile) + ".enc")
-        if os.path.exists(file_path):
+        # public_key = os.path.join(settings.MEDIA_ROOT, str(data.publickey))
+        print(f"file_path: {file_path},privte_key: {key}")
+        if os.path.exists(file_path) and os.path.exists(key):
             if data.algorithms == "RSA & AES":
                 algo = HybridAESRSACipher(key)
                 res = algo.decrypt_file(file_path)
+            elif data.algorithms == "RSA & BLOWFISH":
+                algo = HybridBlowFishRSACipher(key)
+                res = algo.decrypt_file(file_path)
             print(res)
-            t1_stop = time.process_time()
-            dec_time = t1_stop - t1_start
-            print(t1_stop - t1_start)
-            data.dec_time = dec_time
-            data.save()
-            return dec_time
+            if(res=="Decrypted"):
+                t1_stop = time.process_time()
+                dec_time = t1_stop - t1_start
+                print("decrypted Successfully")
+                print(dec_time)
+                data.dec_time = round(dec_time,3)
+                data.save()
+                decrypt_result = "Decrypted Successfully"
+            else:
+                decrypt_result = "Decryption Failed"
+
+            # t1_stop = time.process_time()
+            # dec_time = t1_stop - t1_start
+            # print(t1_stop - t1_start)
+            # data.dec_time = dec_time
+            # data.save()
+            return decrypt_result
         else:
             print("File not found")
             return "Data_Not_Found"
@@ -350,21 +388,27 @@ def Process_data(data):
     # res = {}
     # for item in processed:
     #     res.setdefault(item['algorithms'], []).append(item['dcount'])
-    series = [
-        {
-            "algorithm": k,
-            "data": [{"x":float(d["filesize"])/1048576.0,"y":d["dcount"]} for d in g],
-        }
-        for k, g in groupby(sorted(data, key=lambda d: [d["algorithms"],d['dcount']], reverse= True), key=lambda d: d["algorithms"])
-    ]
-    print(series)
-    return series
+    try:
+        series = [
+            {
+                "algorithm": k,
+                "data": [{"x":float(d["filesize"])/1048576.0,"y":d["dcount"]} for d in g],
+            }
+            for k, g in groupby(sorted(data, key=lambda d: [d["algorithms"],d['dcount']], reverse= True), key=lambda d: d["algorithms"])
+        ]
+        print(series)
+        return series
+    except Exception as exc:
+        print("########################## Error")
+        print(exc)
+        return 0
 
 
 
 def charts(request):
     if 'isloggedin' in request.session:
         dataset = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('enc_time'))
+        # print(dataset)
         result = Process_data(dataset)
         decrypt = UserFileUploadModel.objects.values('algorithms', 'filesize').annotate(dcount=Avg('dec_time')).exclude(dec_time__isnull=True)
         decrypt_res = Process_data(decrypt)

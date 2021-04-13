@@ -12,19 +12,20 @@
 					<div class="signup-header wow fadeInUp" style="padding-bottom:20px;">
 						<h3 class="form-title text-center" style="color:#36383a">Upload Files</h3>
 						<form method="post" id="contact-form" class="form-horizontal" action="{% url 'UploadToCloud' %}" enctype="multipart/form-data"> {% csrf_token %}
-							<div class="row">
-								<div class="col-lg-6 col-sm-6"> {% for i in objects %}
+							<!-- <div class="row"> -->
+								<!-- <div class="col-lg-6 col-sm-6"> {% for i in objects %} -->
 									<input type="hidden" name="name" class="form-control wow fadeInUp" value="{{i.username}}" readonly>
 									<div class="form-group">
-										<label for="email" class="control-label">Email:</label>
-										<input type="text" name="email" class="form-control wow fadeInUp" value="{{i.email}}" readonly> </div>
+										<!-- <label for="email" class="control-label">Email:</label> -->
+										<input type="hidden" name="email" class="form-control wow fadeInUp" value="{{i.email}}" readonly> </div>
 									<div class="form-group">
-										<label for="bucketname">Bucket Name:</label>
-										<input type="text" name="bucketname" class="form-control wow fadeInUp" value="{{i.bucketname}}" placeholder="Bucketname" readonly> </div>
+										<!-- <label for="bucketname">Bucket Name:</label> -->
+										<input type="hidden" name="bucketname" class="form-control wow fadeInUp" value="{{i.bucketname}}" placeholder="Bucketname" readonly> </div>
 									<div class="form-group">
-										<label for="accesskey">Accesskey :</label>
-										<input type="text" name="accesskey" class="form-control wow fadeInUp" value="{{i.accesskey}}" placeholder="Accesskey" readonly> </div> {% endfor %} </div>
-								<div class="col-lg-6 col-sm-6">
+										<!-- <label for="accesskey">Accesskey :</label> -->
+										<input type="hidden" name="accesskey" class="form-control wow fadeInUp" value="{{i.accesskey}}" placeholder="Accesskey" readonly> </div> {% endfor %} 
+									<!-- </div> -->
+								<!-- <div class="col-lg-6 col-sm-6"> -->
 									<div class="form-group">
 										<input type="text" name="secretkey" class="form-control wow fadeInUp" pattern="[A-Za-z]{8}" placeholder="*Enter 8 Character Encryption Key" required> </div>
 									<div class="form-group">
@@ -38,14 +39,14 @@
 											<option value="AES-256">AES-256</option>
 <!--											<option value="RSA" disabled>RSA</option>-->
 											<option value="RSA & AES">RSA & AES</option>
-											<option value="AES & BLOWFISH" disabled>AES & BLOWFISH</option>
+											<option value="RSA & BLOWFISH">RSA & BLOWFISH</option>
 										</select>
 										<br>
-									</div>
+									<!-- </div> -->
 									<div class="form-group">
 										<input type="submit" class="btn btn-get-started wow fadeInUp" style="background:#3898f7;" name="uploadfile" value="Upload File"> </div>
 								</div>
-							</div>
+							<!-- </div> -->
 						</form>
 					</div>
 				<!-- form Ends here -->

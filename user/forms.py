@@ -27,9 +27,9 @@ class UserFileUploadForm(forms.ModelForm):
         ALGORITHMS = [
             ('BLOWFISH', 'BLOWFISH'),
             ('AES-256', 'AES-256'),
-            ('RSA', 'RSA'),
+            # ('RSA', 'RSA'),
             ('RSA & AES', 'RSA & AES'),
-            ('AES & BLOWFISH', 'AES & BLOWFISH'),
+            ('RSA & BLOWFISH', 'RSA & BLOWFISH'),
         ]
         self.fields['algorithms'] = forms.ChoiceField(
             choices=ALGORITHMS)

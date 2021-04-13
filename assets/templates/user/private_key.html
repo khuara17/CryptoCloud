@@ -1,0 +1,26 @@
+{% extends 'user/userbase.html' %}
+{% block contents%}
+    <!-- start banner Area -->
+    <section class="banner-area relative" id="home">
+        <div class="container">
+            <div class="row fullscreen d-flex align-items-center justify-content-start">
+                <div class="banner-content col-lg-8 col-md-12">
+                    <!-- <h1>Go TO My Files :
+                        <a href="{% url 'myfile' %}">My Files</a>
+                    </h1> -->
+                    <h2 style="color: #008000;margin-bottom: 20px;">File has been uploaded successfully!</h2>
+                    <h2>Please Download the Private key:
+                        <a href="{{private}}" id="private" download="">Download</a> 
+                    </h2><br>
+                    <p style="color: red;">Please keep Private key safe.If lost, you won't be able to download the file</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        document.getElementById("private").onclick = function () {
+            location.href = "{% url 'myfile' %}";
+        };
+    </script>
+    <!-- End banner Area -->
+{% endblock%}

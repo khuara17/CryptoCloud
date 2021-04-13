@@ -26,7 +26,7 @@
 									  <th scope="col">Username</th>
 									  <th scope="col">Email</th>
 									  <th scope="col">Bucket Name</th>
-										<th scope="col">Access Key</th>
+										<!-- <th scope="col">Access Key</th> -->
 										<th scope="col">Upload</th>
 										<th scope="col">Delete</th>
 
@@ -39,7 +39,7 @@
 									  <td>{{i.username}}</td>
 									  <td>{{i.email}}</td>
 									  <td>{{i.bucketname}}</td>
-									  <td>{{i.accesskey}}</td>
+									  <!-- <td>{{i.accesskey}}</td> -->
 										<td><a class="btn-link" href="{% url 'upload' i.id %}">Upload Files</a></td>
 									  <td><a class="btn-link" href="{% url 'deletebucket' i.id %}">
                                            <button type="button" class="btn btn-danger">Delete</button></a>
