@@ -41,7 +41,7 @@
                                             <!-- <th scope="col">Access Key</th> -->
                                             <th scope="col">File name</th>
                                             <th scope="col">Algorithm</th>
-                                            <th scope="col">Files Size</th>
+                                            <th scope="col">Files Size(KB)</th>
                                             <th scope="col">Encryption Time</th>
                                             <th scope="col">Decryption Time</th>
                                             <th scope="col">Date Uploaded</th>
@@ -59,7 +59,7 @@
                                         <!-- <td>{{i.accesskey}}</td> -->
                                         <td>{{i.filename}}</td>
                                         <td>{{i.algorithms}}</td>
-                                        <td>{{i.filesize}}</td>
+                                        <td>{% widthratio i.filesize 1000 1 %}</td>
                                         <td>{{i.enc_time}}</td>
                                         <td>{{i.dec_time}}</td>
                                         <td>{{i.date_uploaded}}</td>

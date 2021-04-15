@@ -114,7 +114,7 @@ def DownloadPrivate(request,PrivateKey):
     with open(PrivateKey, 'rb') as fh:
         response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
         response['Content-Disposition'] = 'inline; filename=' + os.path.basename(PrivateKey)
-        # os.remove(file_path2)
+        #os.remove(PrivateKey)
         return response
 
 # Upload File Temp
@@ -173,7 +173,7 @@ def UploadToCloud(request):
 def Encrypt_file(form,selectedalgo):
     # t1_start = time.process_time()
     start_time = time.time()
-    print(start_time)
+    print("start time encryption::",start_time)
     userfile = UserFileUploadModel.objects.last()
     # path = 'UserUploads/{0}/{1}/{2}'.format(form.cleaned_data['name'],form.cleaned_data['bucketname'],form.cleaned_data['userfile'])
     # ext = userfile.split('.')[-1]
@@ -210,8 +210,10 @@ def Encrypt_file(form,selectedalgo):
         algo.generate_keys()
         algo.encrypt_file(file)
     # t1_stop = time.process_time()
-    total = time.time() - start_time
-    print(total)
+    stop_time = time.time()
+    print("stop time::",stop_time)
+    total = (stop_time - start_time)*10
+    print("total time::",total)
     os.remove(file)
     return total, file_size, public,private_key
 
@@ -312,7 +314,7 @@ def Decryption(id,key,algtype):
                     res = algo.decrypt_file(file_path)
                 if(res=="Decrypted"):
                     t1_stop = time.process_time()
-                    dec_time = t1_stop - t1_start
+                    dec_time = (t1_stop - t1_start)*10
                     print("decrypted Successfully")
                     print(dec_time)
                     data.dec_time = round(dec_time,3)
@@ -341,7 +343,7 @@ def Decryption(id,key,algtype):
             print(res)
             if(res=="Decrypted"):
                 t1_stop = time.process_time()
-                dec_time = t1_stop - t1_start
+                dec_time = (t1_stop - t1_start)*10
                 print("decrypted Successfully")
                 print(dec_time)
                 data.dec_time = round(dec_time,3)

@@ -1,11 +1,11 @@
 from Cryptodome.Cipher import AES
 from Cryptodome.Cipher import Blowfish
-from Crypto.Cipher import PKCS1_OAEP
-from Crypto.PublicKey import RSA
-from Crypto.Signature import PKCS1_v1_5
-from Crypto import Random
-from Crypto.Protocol import KDF
-from Crypto.Hash import SHA256, HMAC
+from Cryptodome.Cipher import PKCS1_OAEP
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Signature import PKCS1_v1_5
+from Cryptodome import Random
+from Cryptodome.Protocol import KDF
+from Cryptodome.Hash import SHA256, HMAC
 import base64
 import os
 import struct
