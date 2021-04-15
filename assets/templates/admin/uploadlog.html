@@ -1,0 +1,49 @@
+{% extends 'admin/adminbase.html' %}
+
+
+    {% block contents %}
+            <!-- End banner Area -->
+            <section class="generic-banner relative">
+				<div class="container">
+					<div class="row height align-items-center justify-content-center">
+						<div class="col-lg-10">
+							<div class="generic-banner-content">
+                                <h2 class="text-white">Upload Logs</h2>
+								<table class="table table-striped table-hover table-bordered table-dark">
+                                      <thead class="bg-secondary">
+                                        <tr>
+                                          <th scope="col">Sr No.</th>
+                                          <th scope="col">Email Id</th>
+                                          <th scope="col">Algorithm Used</th>
+                                            <th scope="col">File name</th>
+                                             <th scope="col">File Size</th>
+                                            <th scope="col">Encryption Time</th>
+                                            <th scope="col">Decryption Time</th>
+                                            <th scope="col">Date</th>
+                                        </tr>
+                                      </thead>
+                                    <tbody id="myTable">
+                                        {% for i in logs %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{i.email}}</td>
+                                            <td>{{i.algorithms}}</td>
+                                            <td>{{i.filename}}</td>
+                                            <td>{{i.filesize}}</td>
+                                            <td>{{i.enc_time}}</td>
+                                            <td>{{i.dec_time}}</td>
+                                            <td>{{i.date_uploaded}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                             </table>
+                                  <div class="col-md-12 text-center">
+                                        <ul class="pagination pagination-lg pager" id="myPager"></ul>
+                                  </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- End banner Area -->
+    {% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'user/userbase.html' %}
+{% block contents%}
+    <!-- start banner Area -->
+    <section class="banner-area relative" id="home">
+        <div class="container">
+            <div class="row fullscreen d-flex align-items-center justify-content-start">
+                <div class="banner-content col-lg-12 col-md-12">
+                    <!-- <h1>Welcome!</h1>
+                    <h2>Please Explore our services, <a href="{% url 'myfile' %}">Click Here</a></h2> -->
+                    <div class="data">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h3>BLOWFISH</h3>
+                                <p>
+                                    <strong>Blowfish</strong> is an encryption technique designed by <strong>
+                                        Bruce Schneier</strong> in 1993 as an alternative to 
+                                        DES Encryption Technique. It is significantly faster than DES and provides 
+                                        a good encryption rate with no effective 
+                                        cryptanalysis technique found to date. It is one of the first, secure block 
+                                        cyphers not subject to any patents and hence freely available for anyone to 
+                                        use.
+                                </p>
+                                <!-- <ol>
+                                    <li><b>blockSize</b>: 64-bits</li>
+                                    <li><b>keySize</b>: 32-bits to 448-bits variable size</li>
+                                    <li><b>number of subkeys</b>: 18 [P-array]</li>
+                                    <li><b>number of rounds</b>: 16</li>
+                                    <li><b>number of subsitution boxes</b>: 4 [each having 512 entries of 32-bits each]</li>
+                                </ol> -->
+                            </div>
+                            <div class="col-sm-6">
+                                <h3>AES</h3>
+                                <p>
+                                    <strong>AES</strong> stands for <strong>Advanced Encryption Standard</strong> 
+                                    and is a majorly used symmetric encryption algorithm. It is mainly used for
+                                     encryption and protection of electronic data. It was used as the replacement
+                                      of DES(Data encryption standard) as it is much faster and better than DES.
+                                       AES consists of three block ciphers and these ciphers are used to provide 
+                                       encryption of data.
+                                </p>
+                                <!-- <ol>
+                                    <li>AES has keys of three lengths which are of 128, 192, 256 bits.</li>
+                                    <li>It is flexible and has implementation for software and hardware.</li>
+                                    <li>It provides high security and can prevent many attacks.</li>
+                                    <li>It doesn’t have any copyright so it can be easily used globally.</li>
+                                    <li>It consists of 10 rounds of processing for 128 bit keys.</li>
+                                </ol> -->
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h3>RSA</h3>
+                                <p>RSA algorithm is asymmetric cryptography algorithm. Asymmetric actually means that it works on two different keys i.e. <strong>Public Key</strong> and <strong>Private Key.</strong> As the name describes that the Public Key is given to everyone and Private key is kept private.</p>
+                                <p><strong>An example of asymmetric cryptography :</strong>
+                                    <ol>
+                                        <li>A client (for example browser) sends its public key to the server and requests for some data.</li>
+                                        <li>The server encrypts the data using client’s public key and sends the encrypted data.Client receives this data and decrypts it.</li>
+                                    </ol>
+                                </p>
+                                <!-- <ol>
+                                    <li><b>blockSize</b>: 64-bits</li>
+                                    <li><b>keySize</b>: 32-bits to 448-bits variable size</li>
+                                    <li><b>number of subkeys</b>: 18 [P-array]</li>
+                                    <li><b>number of rounds</b>: 16</li>
+                                    <li><b>number of subsitution boxes</b>: 4 [each having 512 entries of 32-bits each]</li>
+                                </ol> -->
+                            </div>
+                            <div class="col-sm-6">
+                                <h3>HYBRID ALGORITHMS</h3>
+                                <p>
+                                    In cryptography, a hybrid cryptosystem is one which combines the convenience of a public-key cryptosystem with the efficiency of a symmetric-key cryptosystem. Public-key cryptosystems are convenient in that they do not require the sender and receiver to share a common secret in order to communicate securely (among other useful properties). However, they often rely on complicated mathematical computations and are thus generally much more inefficient than comparable symmetric-key cryptosystems. In many applications, the high cost of encrypting long messages in a public-key cryptosystem can be prohibitive. This is addressed by hybrid systems by using a combination of both. 
+                                </p>
+                                <!-- <ol>
+                                    <li>AES has keys of three lengths which are of 128, 192, 256 bits.</li>
+                                    <li>It is flexible and has implementation for software and hardware.</li>
+                                    <li>It provides high security and can prevent many attacks.</li>
+                                    <li>It doesn’t have any copyright so it can be easily used globally.</li>
+                                    <li>It consists of 10 rounds of processing for 128 bit keys.</li>
+                                </ol> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End banner Area -->
+{% endblock%}
+
+
+
+

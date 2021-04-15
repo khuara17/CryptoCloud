@@ -1,0 +1,72 @@
+{% extends 'admin/adminbase.html' %}
+
+
+    {% block contents %}
+            <!-- End banner Area -->
+            <section class="generic-banner relative">
+				<div class="container">
+					<div class="row height align-items-center justify-content-center">
+						<div class="col-lg-10">
+							<div class="generic-banner-content">
+                                <h2 class="text-white">User Management</h2>
+								<table class="table table-striped table-hover table-bordered table-dark">
+                                      <thead class="bg-secondary">
+                                            <tr>
+                                                <th scope="col">Sr No.</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Email Id</th>
+                                                <th scope="col">Username</th>
+                                                <th scope="col">Contact No.</th>
+                                                <th scope="col">Adress</th>
+                                                <th scope="col">Date Registered</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for i in users %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{i.name}}</td>
+                                            <td>{{i.email}}</td>
+                                            <td>{{i.username}}</td>
+                                            <td>{{i.contact}}</td>
+                                            <td>{{i.address}}</td>
+                                            <td>{{i.date_created}}</td>
+                                            <td>{{i.status}}</td>
+                                            {% if i.status == 'waiting' %}
+                                                <td>
+                                                    <button type="button" class="btn btn-primary">
+                                                    <a class="btn-link" href="../user_activation/?uid={{ i.id }}&status={{ i.status }}" style="color:black;">Activate</a>
+                                                    </button>
+                                                </td>
+                                            {% else %}
+                                                <td>
+                                                    <button type="button" class="btn btn-primary">
+                                                    <a class="btn-link" href="../user_activation/?uid={{ i.id }}&status={{ i.status }}" style="color:black;">De-Activate</a>
+                                                    </button>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                      {% endfor %}
+                                        <!--<tr>-->
+                                          <!--<th scope="row">2</th>-->
+                                          <!--<td>Jacob</td>-->
+                                          <!--<td>Thornton</td>-->
+                                          <!--<td>@fat</td>-->
+                                        <!--</tr>-->
+                                        <!--<tr>-->
+                                          <!--<th scope="row">3</th>-->
+                                          <!--<td>Larry</td>-->
+                                          <!--<td>the Bird</td>-->
+                                          <!--<td>@twitter</td>-->
+                                        <!--</tr>-->
+                                      </tbody>
+                                    </table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- End banner Area -->
+    {% endblock %}

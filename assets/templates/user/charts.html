@@ -1,0 +1,295 @@
+ {% extends 'user/userbase.html' %}
+
+
+    {% block contents %}
+        <section class="generic-banner relative">
+            <div class="container">
+                <div class="row height align-items-center justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="generic-banner-content">
+                            <h2 class="text-white">Chart Analysis</h2>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div id='myDiv1'><!-- Plotly chart will be drawn inside this DIV --></div>
+                                    </div>
+                                </div>
+<!--                            {% for entry in dataset %}-->
+<!--                                    {-->
+<!--                                        x: [{% for val in entry.data %}{{ val.x }}{% if not forloop.last %},-->
+<!--                                                  {% endif %}{% endfor %}],-->
+<!--                                        y: [{% for val in entry.data %}{{ val.y }}{% if not forloop.last %},-->
+<!--                                                   {% endif %}{% endfor %}],-->
+<!--                                        mode: 'lines',-->
+<!--                                        name: '{{ entry.algorithm }}'-->
+<!--                                    }-->
+<!--                                    {% if not forloop.last %} ,  {% endif %}-->
+<!--                                {% endfor %}-->
+<!--                            <div id="decryptchart" style="height: 300px; width: 90%;"></div>-->
+<!--                                data: [-->
+<!--                                        {% for entry in dataset %}-->
+<!--                                            {-->
+<!--                                                type:"line",-->
+<!--                                                axisYType: "secondary",-->
+<!--                                                name: "{{ entry.algorithm }}",-->
+<!--                                                showInLegend: true,-->
+<!--                                                markerSize: 0,-->
+
+<!--                                                dataPoints: [-->
+<!--                                                {% for val in entry.data %}-->
+<!--                                                    {{ val }}-->
+<!--                                                    { x: {{ val.x }} , y: {{ val.y }} }-->
+<!--                                                    {% if not forloop.last %} ,  {% endif %}-->
+<!--                                                {% endfor %}-->
+<!--                                                ]-->
+<!--                                            }-->
+<!--                                            {% if not forloop.last %} ,  {% endif %}-->
+<!--                                        {% endfor %}-->
+
+<!--                                    ]-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+ <script>
+<!--     var trace4 = {-->
+<!--     x: [17.405162811279297, 4.019435882568359, 0.00428009033203125, 7.239057540893555],-->
+<!--     y: [4.597, 4.317, 3.91, 4.571],-->
+<!--     mode: 'lines',-->
+<!--     name: 'Lines'-->
+<!--     }-->
+<!--     var trace1 = {-->
+<!--  x: [1, 2, 3, 4],-->
+<!--  y: [10, 15, 13, 17],-->
+<!--  mode: 'lines',-->
+<!--  name: 'Scatter'-->
+<!--};-->
+
+<!--var trace2 = {-->
+<!--  x: [2, 3, 4, 5],-->
+<!--  y: [16, 5, 11, 9],-->
+<!--  mode: 'lines',-->
+<!--  name: 'Lines'-->
+<!--};-->
+
+<!--var trace3 = {-->
+<!--  x: [1, 2, 3, 4],-->
+<!--  y: [12, 9, 15, 12],-->
+<!--  mode: 'lines+markers',-->
+<!--  name: 'Scatter and Lines'-->
+<!--};-->
+<!--var data = [trace1, trace2, trace3 , trace4];-->
+<!--console.log(data)-->
+var data = [
+                {% for entry in dataset %}
+                        {
+                            x: [{% for val in entry.data %}{{ val.x }}{% if not forloop.last %},
+                                      {% endif %}{% endfor %}],
+                            y: [{% for val in entry.data %}{{ val.y }}{% if not forloop.last %},
+                                       {% endif %}{% endfor %}],
+                            mode: 'lines+markers',
+                            connectgaps: true,
+                            name: '{{ entry.algorithm }}'
+                        }
+                        {% if not forloop.last %} ,  {% endif %}
+                    {% endfor %}
+            ]
+console.log(data)
+var layout = {
+  title: 'Encryption Time Analysis',
+  xaxis: {
+    title: 'Size in MegaBytes (MB)'
+  },
+  yaxis: {
+    title: 'Encryption Time (sec)'
+  }
+};
+
+Plotly.newPlot('myDiv', data, layout);
+
+var data1 = [
+                {% for entry in decrypt %}
+                        {
+                            x: [{% for val in entry.data %}{{ val.x }}{% if not forloop.last %},
+                                      {% endif %}{% endfor %}],
+                            y: [{% for val in entry.data %}{{ val.y }}{% if not forloop.last %},
+                                       {% endif %}{% endfor %}],
+                            mode: 'lines+markers',
+                            connectgaps: true,
+                            name: '{{ entry.algorithm }}'
+                        }
+                        {% if not forloop.last %} ,  {% endif %}
+                    {% endfor %}
+            ]
+console.log(data1)
+var layout1 = {
+  title: 'Decryption Time Analysis',
+  xaxis: {
+    title: 'Size in MegaBytes (MB)'
+  },
+  yaxis: {
+    title: 'Decryption Time (sec)'
+  }
+};
+
+Plotly.newPlot('myDiv1', data1, layout1);
+ </script>
+
+<!--<script>-->
+<!--window.onload = function () {-->
+
+<!--var chart = new CanvasJS.Chart("chartContainer", {-->
+<!--    animationEnabled: true,-->
+<!--	theme: "light2",-->
+<!--	title: {-->
+<!--		text: "Encryption Time Comparision"-->
+<!--	},-->
+<!--	axisX: {-->
+<!--	    title: "Size in MegaBytes (MB)",-->
+<!--	    crosshair: {-->
+<!--			enabled: true,-->
+<!--			snapToDataPoint: true-->
+<!--		}-->
+<!--	},-->
+<!--	axisY: {-->
+<!--		title: "Encryption Time",-->
+<!--		includeZero: true,-->
+<!--		crosshair: {-->
+<!--			enabled: true-->
+<!--		}-->
+<!--	},-->
+<!--	toolTip: {-->
+<!--		shared: true-->
+<!--	},-->
+<!--	legend: {-->
+<!--        cursor:"pointer",-->
+<!--		verticalAlign: "bottom",-->
+<!--		horizontalAlign: "left",-->
+<!--		dockInsidePlotArea: true,-->
+<!--		itemclick: toogleDataSeries-->
+<!--	},-->
+<!--	data: [-->
+<!--        {% for entry in dataset %}-->
+<!--            {-->
+<!--                type:"line",-->
+<!--                axisYType: "secondary",-->
+<!--                name: "{{ entry.algorithm }}",-->
+<!--                showInLegend: true,-->
+<!--                markerSize: 0,-->
+
+<!--                dataPoints: [-->
+<!--                {% for val in entry.data %}-->
+<!--                    { x: {{ val.x }} , y: {{ val.y }} }-->
+<!--                    {% if not forloop.last %} ,  {% endif %}-->
+<!--                {% endfor %}-->
+<!--                ]-->
+<!--            }-->
+<!--            {% if not forloop.last %} ,  {% endif %}-->
+<!--        {% endfor %}-->
+
+<!--	]-->
+<!--});-->
+
+<!--chart.render();-->
+
+<!--function toogleDataSeries(e){-->
+<!--	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {-->
+<!--		e.dataSeries.visible = false;-->
+<!--	} else{-->
+<!--		e.dataSeries.visible = true;-->
+<!--	}-->
+<!--	chart.render();-->
+<!--}-->
+
+<!--}-->
+<!--</script>-->
+<!--<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>-->
+<!--			 End banner Area -->
+<!-- <script>-->
+<!-- window.onload = function () {-->
+<!--         var options = {-->
+<!--          series: [-->
+<!--                    {% for entry in dataset %}-->
+<!--                        {-->
+<!--                            name: '{{ entry.name }}',-->
+<!--                            data: {{ entry.data }}-->
+<!--                        }-->
+<!--                        {% if not forloop.last %},-->
+
+<!--                        {% endif %}-->
+<!--                    {% endfor %}-->
+<!--        ],-->
+<!--          chart: {-->
+<!--          height: 350,-->
+<!--          type: 'line',-->
+<!--          zoom: {-->
+<!--            enabled: false-->
+<!--          },-->
+<!--        },-->
+<!--        dataLabels: {-->
+<!--          enabled: false-->
+<!--        },-->
+<!--        stroke: {-->
+<!--          width: [5, 7, 5],-->
+<!--          curve: 'straight',-->
+<!--          dashArray: [0, 8, 5]-->
+<!--        },-->
+<!--        title: {-->
+<!--          text: 'Encryption Time Analysis',-->
+<!--          align: 'center'-->
+<!--        },-->
+<!--        legend: {-->
+<!--          tooltipHoverFormatter: function(val, opts) {-->
+<!--            return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''-->
+<!--          }-->
+<!--        },-->
+<!--        markers: {-->
+<!--          size: 0,-->
+<!--          hover: {-->
+<!--            sizeOffset: 6-->
+<!--          }-->
+<!--        },-->
+<!--        xaxis: {-->
+<!--          categories: [0,{% for entry in dataset %}{{ entry.filesize }}{% if not forloop.last %},-->
+<!--                            {% endif %}{% endfor %}-->
+<!--          ],-->
+<!--        },-->
+<!--        tooltip: {-->
+<!--          y: [-->
+<!--            {-->
+<!--              title: {-->
+<!--                formatter: function (val) {-->
+<!--                  return val + " (mins)"-->
+<!--                }-->
+<!--              }-->
+<!--            },-->
+<!--            {-->
+<!--              title: {-->
+<!--                formatter: function (val) {-->
+<!--                  return val + " per session"-->
+<!--                }-->
+<!--              }-->
+<!--            },-->
+<!--            {-->
+<!--              title: {-->
+<!--                formatter: function (val) {-->
+<!--                  return val;-->
+<!--                }-->
+<!--              }-->
+<!--            }-->
+<!--          ]-->
+<!--        },-->
+<!--        grid: {-->
+<!--          borderColor: '#f1f1f1',-->
+<!--        }-->
+<!--        };-->
+
+<!--        var chart = new ApexCharts(document.querySelector("#chartContainer"), options);-->
+<!--        chart.render();-->
+<!--       }-->
+<!-- </script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>-->
+    {% endblock %}

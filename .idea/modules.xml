@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/CryptoCloud.iml" filepath="$PROJECT_DIR$/.idea/CryptoCloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../acomparativesanalysis/.idea/acomparativesanalysis.iml" filepath="$PROJECT_DIR$/../acomparativesanalysis/.idea/acomparativesanalysis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../z_New_tech_Try/encrpt/Refrence codes/cloudmonitor/.idea/cloudmonitor.iml" filepath="$PROJECT_DIR$/../../../../z_New_tech_Try/encrpt/Refrence codes/cloudmonitor/.idea/cloudmonitor.iml" />
+    </modules>
+  </component>
+</project>
